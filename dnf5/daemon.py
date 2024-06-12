@@ -3,7 +3,7 @@
 import logging
 from functools import partial
 from logging import getLogger
-from typing import Self
+from typing import Self, Any
 from dasbus.connection import SystemMessageBus
 from dasbus.identifier import DBusServiceIdentifier
 from dasbus.loop import EventLoop
@@ -113,5 +113,7 @@ if __name__ == "__main__":
     with Dnf5DbusClient() as client:
         options = {"package_attrs": gv_list(["nevra"]),"scope":gv_string("upgrades")}
         packages = client.get_packages(options)
-        print(packages)
+        for pkg_dict in packages:
+            nevra = pkg_dict["nevra"].get_string()                       
+            print(nevra)
         print(len(packages))
