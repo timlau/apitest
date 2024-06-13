@@ -8,6 +8,7 @@ from dasbus.connection import SystemMessageBus
 from dasbus.identifier import DBusServiceIdentifier
 from dasbus.loop import EventLoop
 from dasbus.error import DBusError  # noqa
+from dasbus.typing import get_native, get_variant
 from gi.repository import GLib  # type: ignore
 
 
@@ -23,16 +24,6 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)-6s: (%(name)-5s) -  %(message)s",
     datefmt="%H:%M:%S",
 )
-
-
-# GLib.Variant converters
-def gv_list(var: list[str]) -> GLib.Variant:
-    return GLib.Variant("as", var)
-
-
-def gv_string(var: str) -> GLib.Variant:
-    return GLib.Variant("s", var)
-
 
 # async call handler class
 class AsyncDbusCaller:
@@ -111,9 +102,13 @@ class Dnf5DbusClient:
 
 if __name__ == "__main__":
     with Dnf5DbusClient() as client:
-        options = {"package_attrs": gv_list(["nevra"]),"scope":gv_string("upgrades")}
+        pkg_attrs = get_variant(list[str],['nevra'])
+        scope = get_variant(str,"upgrades")
+        print(pkg_attrs)
+        options = {"package_attrs": pkg_attrs,"scope":scope}
         packages = client.get_packages(options)
         for pkg_dict in packages:
-            nevra = pkg_dict["nevra"].get_string()                       
-            print(nevra)
+            values = get_native(pkg_dict)
+            # nevra = pkg_dict["nevra"].get_string()                       
+            print(values["nevra"])
         print(len(packages))
