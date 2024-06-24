@@ -1,5 +1,8 @@
 # Test dnf metadata mem-leak
 #
+# requirements:
+# dnf5 install python3-memray
+#
 # run with:
 #
 # /bin/python -m memray run --live ./dnf5/mem_updates.py
@@ -32,6 +35,7 @@ def check_updates():
         updates.filter_latest_evr()
         return len(list(updates))
     finally:
+        del base.repo_sack
         del base
 
 
@@ -43,6 +47,7 @@ def main():
         time.sleep(5)
     for x in range(3):
         subprocess.call(expire_cmd, shell=False)
+        time.sleep(2)
         print(check_updates())
         time.sleep(5)
     time.sleep(20)
