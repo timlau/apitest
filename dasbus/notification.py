@@ -16,6 +16,7 @@ def send_notification(app_name, icon_name, summary, body, actions=[], hints={}, 
     proxy = NOTIFICATION.get_proxy()
     id = proxy.Notify(app_name, 0, icon_name, summary, body, actions, hints, timeout)
     print("The notification {} was sent.".format(id))
+    return id
 
 
 def main():
