@@ -4,9 +4,7 @@
 
 from os import name
 from dasbus.connection import SessionMessageBus
-from dasbus.error import DBusError
 from dasbus.identifier import DBusServiceIdentifier
-from dasbus.typing import get_native
 
 NOTIFICATION_NAMESPACE = ("org", "freedesktop", "Notifications")
 NOTIFICATION = DBusServiceIdentifier(namespace=NOTIFICATION_NAMESPACE, message_bus=SessionMessageBus())
